@@ -1,0 +1,91 @@
+exclude_paths:
+  - "spec/"
+  - "test/"
+  - "vendor/"
+  - "db/"
+  - "config/"
+  - "node_modules/"
+
+detectors:
+  DataClump:
+    enabled: true
+    max_copies: 2
+    min_clump_size: 2
+
+  FeatureEnvy:
+    enabled: true
+
+  UtilityFunction:
+    enabled: true
+
+  NestedIterators:
+    enabled: true
+    max_allowed_nesting: 2
+
+  TooManyStatements:
+    enabled: true
+    max_statements: 10
+
+  TooManyMethods:
+    enabled: true
+    max_methods: 20
+
+  BooleanParameter:
+    enabled: false
+
+  ControlParameter:
+    enabled: true
+
+  DuplicateMethodCall:
+    enabled: true
+    max_calls: 1
+
+  InstanceVariableAssumption:
+    enabled: true
+
+  ModuleInitialize:
+    enabled: true
+
+  NilCheck:
+    enabled: true
+
+  RepeatedConditional:
+    enabled: true
+    max_ifs: 3
+
+  UncommunicativeMethodName:
+    enabled: true
+
+  UncommunicativeModuleName:
+    enabled: true
+
+  UncommunicativeParameterName:
+    enabled: true
+
+  UncommunicativeVariableName:
+    enabled: true
+
+  Attribute:
+    enabled: false
+
+  ClassVariable:
+    enabled: false
+
+  IrresponsibleModule:
+    enabled: false
+
+  LongParameterList:
+    enabled: false
+
+  LongYieldList:
+    enabled: false
+
+  TooManyInstanceVariables:
+    enabled: false
+  
+  FeatureEnvy:
+    enabled: false
+  
+  DuplicateMethodCall:
+    enabled: false
+  
