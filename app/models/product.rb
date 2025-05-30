@@ -6,14 +6,14 @@
 #  name          :string           not null
 #  unit_price    :decimal          not null
 #  total_price   :decimal          null
-#  cart_id       :bigint           not null, foreign_key
+#  cart_id       :bigint           null, foreign_key
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #
 #  Has index: index_products_on_cart_id
 #
 class Product < ApplicationRecord
-  belongs_to :cart
+  belongs_to :cart, optional: true
 
   validates :name, presence: true
   validates :unit_price, presence: true, numericality: { greater_than_or_equal_to: 0.01 }
