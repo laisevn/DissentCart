@@ -1,0 +1,4 @@
+module ProductConstants
+  MIN_PRICE_VALIDATION = 0.01
+  MIN_QUANTITY_VALIDATION = 0
+end

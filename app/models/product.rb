@@ -16,8 +16,10 @@ class Product < ApplicationRecord
   belongs_to :cart, optional: true
 
   validates :name, presence: true
-  validates :unit_price, presence: true, numericality: { greater_than_or_equal_to: 0.01 }
-  validates :quantity, presence: true, numericality: { only_integer: true, greater_than: 0 }
+  validates :unit_price, presence: true,
+                         numericality: { greater_than_or_equal_to: ProductConstants::MIN_PRICE_VALIDATION }
+  validates :quantity, presence: true,
+                       numericality: { only_integer: true, greater_than: ProductConstants::MIN_QUANTITY_VALIDATION }
 
   before_validation :calculate_total_price
 
