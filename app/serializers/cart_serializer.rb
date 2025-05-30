@@ -7,7 +7,7 @@ class CartSerializer
     {
       id: @cart.id,
       products: serialized_products,
-      total_price: CartTotalCalculator.new(@cart.id).calculate
+      total_price: CartTotalCalculator.new(@cart.id).calculate.to_f
     }
   end
 

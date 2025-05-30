@@ -3,20 +3,6 @@ require 'rails_helper'
 describe CartsController do
   Rails.application.routes
 
-  # describe 'GET #index' do
-  #   it 'retorna sucesso' do
-  #     get :index
-
-  #     expect(response).to have_http_status(:ok)
-  #   end
-
-  #   it 'retorna uma lista vazia de carrinhos' do
-  #     get :index
-
-  #     expect(json_response).to eq([])
-  #   end
-  # end
-
   describe 'GET #show' do
     let!(:cart) { create(:cart) }
 
@@ -37,12 +23,42 @@ describe CartsController do
 
     context 'com carrinho inválido' do
       it 'retorna erro 404' do
-        # allow(Cart::ListProducts).to receive(:new).and_raise(CartErrors::CartNotFound)
-
         get :show, params: { id: 999 }
 
         expect(response).to have_http_status(:not_found)
         expect(json_response[:error]).to match(/Carrinho não encontrado/)
+      end
+    end
+  end
+
+  describe 'POST #create' do
+    let(:cart) { create(:cart) }
+    let(:product) { create(:product, product_id: 345, unit_price: 1.99, name: 'Produto Teste') }
+
+    context 'quando adiciona um produto com sucesso' do
+      it 'retorna status 201' do
+        post :create, params: { cart_id: cart.id, product_id: product.product_id, quantity: 1 }
+        expect(response).to have_http_status(:created)
+      end
+
+      it 'retorna o carrinho com o produto adicionado' do
+        post :create, params: { cart_id: cart.id, product_id: product.product_id, quantity: 1 }
+
+        expect(json_response[:products].first[:id]).to eq(product.product_id)
+        expect(json_response[:products].first[:quantity]).to eq(1)
+        expect(json_response[:products].first[:unit_price]).to eq(product.unit_price.to_s)
+      end
+    end
+
+    context 'quando falha ao adicionar o produto' do
+      let(:invalid_product_id) { 999 }
+
+      it 'retorna erro se o produto não existe' do
+        allow(Product).to receive(:find_by).with(product_id: invalid_product_id.to_s).and_return(nil)
+        post :create, params: { cart_id: cart.id, product_id: invalid_product_id, quantity: product.quantity }
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(json_response[:error]).to include(/Produto não encontrado/)
       end
     end
   end

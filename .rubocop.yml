@@ -65,7 +65,10 @@ RSpec/NamedSubject:
   Enabled: false
 
 RSpec/ExampleLength:
-  Max: 20  
+  Max: 20
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 10  
 
 Lint/EmptyBlock:
   Enabled: false

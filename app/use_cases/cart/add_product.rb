@@ -15,7 +15,7 @@ class Cart::AddProduct
     cart.add_product(product_id, quantity, product)
     cart.save!
 
-    cart
+    cart.reload
   end
 
   private
@@ -25,11 +25,11 @@ class Cart::AddProduct
   end
 
   def find_product(product_id)
-    product_class.find_by(id: product_id) || raise(CartErrors::ProductNotFound)
+    product_class.find_by(product_id: product_id) || raise(CartErrors::ProductNotFound)
   end
 
   def validate_quantity(quantity)
-    return if quantity.is_a?(Integer) && quantity.positive?
+    return if quantity.to_i.positive?
 
     raise CartErrors::InvalidQuantity, "Quantidade inválida: #{quantity}"
   end
