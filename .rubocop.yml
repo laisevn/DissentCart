@@ -4,6 +4,7 @@ plugins:
   - rubocop-performance
 
 AllCops:
+  SuggestExtensions: false
   NewCops: enable
   TargetRubyVersion: 3.3.1
   DisplayCopNames: true
@@ -67,7 +68,4 @@ RSpec/ExampleLength:
   Max: 20  
 
 Lint/EmptyBlock:
-  Enabled: false
-
-SuggestExtensions:
   Enabled: false
