@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe CartsController, type: :controller do
+describe CartsController do
   Rails.application.routes
 
   describe 'GET #show' do
@@ -61,6 +61,51 @@ describe CartsController, type: :controller do
         json = json_response
         expect(json[:id]).to eq(session[:cart_id])
         expect(json[:products].first[:quantity]).to eq(2)
+      end
+    end
+  end
+
+  describe 'POST #add_item' do
+    context 'quando o produto já está no carrinho' do
+      let!(:cart) { create(:cart) }
+      let!(:product_x) do
+        create(:product, name: 'Produto X', unit_price: 7.00, quantity: 2)
+      end
+
+      before do
+        cart.add_product(product_x.product_id, product_x.quantity, product_x)
+        session[:cart_id] = cart.id
+      end
+
+      it 'atualiza a quantidade corretamente' do
+        expect do
+          post :add_item, params: { product_id: product_x.product_id, quantity: 1 }
+        end.to change {
+          cart.reload.products.find_by(product_id: product_x.product_id)&.quantity
+        }.from(2).to(3)
+
+        json = json_response
+        expect(json[:products].first[:quantity]).to eq(3)
+      end
+
+      it 'retorna status 200 OK' do
+        post :add_item, params: { product_id: product_x.product_id, quantity: 1 }
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'quando o produto não está no carrinho' do
+      let!(:cart) { create(:cart) }
+      let!(:new_product) do
+        create(:product, product_id: 456, name: 'Produto Novo', unit_price: 5.0)
+      end
+
+      before { session[:cart_id] = cart.id }
+
+      it 'não adiciona o produto (deve usar POST /cart)' do
+        post :add_item, params: { product_id: new_product.product_id, quantity: 2 }
+        expect(response).to have_http_status(422)
+        expect(json_response[:error]).to match(/Produto não encontrado/)
       end
     end
   end

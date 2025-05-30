@@ -13,5 +13,9 @@ FactoryBot.define do
     after(:build) do |product|
       product.total_price = product.quantity * product.unit_price if product.attributes.key?('total_price')
     end
+
+    factory :product_without_cart do
+      cart { nil }
+    end
   end
 end
