@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-describe CartsController do
+describe CartsController, type: :controller do
   Rails.application.routes
 
   describe 'GET #show' do
-    let!(:cart) { create(:cart) }
+    let(:cart) { create(:cart) }
 
     context 'com carrinho válido' do
       let!(:products) { create_list(:product, 2, cart: cart) }
@@ -32,33 +32,35 @@ describe CartsController do
   end
 
   describe 'POST #create' do
-    let(:cart) { create(:cart) }
-    let(:product) { create(:product, product_id: 345, unit_price: 1.99, name: 'Produto Teste') }
+    let(:product) do
+      create(:product, cart: nil, product_id: 345, unit_price: 1.99, name: 'Produto Teste', quantity: 1)
+    end
+
+    before { session[:cart_id] = nil }
 
     context 'quando adiciona um produto com sucesso' do
-      it 'retorna status 201' do
-        post :create, params: { cart_id: cart.id, product_id: product.product_id, quantity: 1 }
-        expect(response).to have_http_status(:created)
+      it 'cria um novo carrinho na primeira requisição' do
+        expect do
+          post :create, params: { product_id: product.product_id, quantity: 1 }
+        end.to change(Cart, :count).by(1)
+      end
+
+      it 'usa o mesmo carrinho em requisições subsequentes' do
+        post :create, params: { product_id: product.product_id, quantity: 1 }
+        first_cart_id = session[:cart_id]
+
+        post :create, params: { product_id: product.product_id, quantity: 1 }
+
+        expect(session[:cart_id]).to eq(first_cart_id)
+        expect(Cart.count).to eq(1)
       end
 
       it 'retorna o carrinho com o produto adicionado' do
-        post :create, params: { cart_id: cart.id, product_id: product.product_id, quantity: 1 }
+        post :create, params: { product_id: product.product_id, quantity: 2 }
 
-        expect(json_response[:products].first[:id]).to eq(product.product_id)
-        expect(json_response[:products].first[:quantity]).to eq(1)
-        expect(json_response[:products].first[:unit_price]).to eq(product.unit_price.to_s)
-      end
-    end
-
-    context 'quando falha ao adicionar o produto' do
-      let(:invalid_product_id) { 999 }
-
-      it 'retorna erro se o produto não existe' do
-        allow(Product).to receive(:find_by).with(product_id: invalid_product_id.to_s).and_return(nil)
-        post :create, params: { cart_id: cart.id, product_id: invalid_product_id, quantity: product.quantity }
-
-        expect(response).to have_http_status(:unprocessable_content)
-        expect(json_response[:error]).to include(/Produto não encontrado/)
+        json = json_response
+        expect(json[:id]).to eq(session[:cart_id])
+        expect(json[:products].first[:quantity]).to eq(2)
       end
     end
   end

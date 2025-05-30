@@ -28,22 +28,22 @@ describe Cart::AddProduct do
 
     context 'com quantidade inválida' do
       let(:cart) { create(:cart) }
-      let(:product) { create(:product) }
+      let(:product) { create(:product, product_id: 456) }
 
       it 'levanta erro InvalidQuantity' do
         expect do
-          subject.call(cart.id, product.id, -1)
+          subject.call(cart.id, product.product_id, -1)
         end.to raise_error(CartErrors::InvalidQuantity)
       end
     end
 
     context 'com dados válidos' do
       let(:cart) { create(:cart) }
-      let(:product) { create(:product) }
+      let(:product) { create(:product, product_id: 789) }
 
       it 'adiciona produto ao carrinho' do
         expect do
-          subject.call(cart.id, product.id, 2)
+          subject.call(cart.id, product.product_id, 2)
         end.to change { cart.products.count }.by(1)
       end
     end

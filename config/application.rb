@@ -19,6 +19,9 @@ module DissentCart
     # config.autoload_paths << Rails.root.join('app/validators')
     # config.autoload_paths << Rails.root.join('app/exceptions')
 
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore, key: '_dissent_cart_session'
+
     config.cache_store = :redis_cache_store, { url: ENV.fetch('REDIS_URL') { 'redis://localhost:6379/0' } }
   end
 end

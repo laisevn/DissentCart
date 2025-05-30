@@ -14,7 +14,6 @@ class Cart::AddProduct
 
     cart.add_product(product_id, quantity, product)
     cart.save!
-
     cart.reload
   end
 
@@ -29,7 +28,8 @@ class Cart::AddProduct
   end
 
   def validate_quantity(quantity)
-    return if quantity.to_i.positive?
+    quantity_int = quantity.to_i
+    return if quantity_int.positive?
 
     raise CartErrors::InvalidQuantity, "Quantidade inválida: #{quantity}"
   end
