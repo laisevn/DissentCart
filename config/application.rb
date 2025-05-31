@@ -14,11 +14,6 @@ module DissentCart
 
     config.api_only = true
 
-    # load not default directories
-    config.autoload_paths << Rails.root.join('app/use_cases')
-    # config.autoload_paths << Rails.root.join('app/validators')
-    # config.autoload_paths << Rails.root.join('app/exceptions')
-
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore, key: '_dissent_cart_session'
 
