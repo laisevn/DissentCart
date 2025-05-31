@@ -6,4 +6,6 @@ Rails.application.routes.draw do
       post 'add_item', action: :add_item
     end
   end
+
+  delete '/carts/:id', to: 'carts#delete_item', as: :delete_item
 end

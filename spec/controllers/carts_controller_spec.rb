@@ -110,6 +110,63 @@ describe CartsController do
     end
   end
 
+  describe 'DELETE #delete_item' do
+    let!(:cart) { create(:cart) }
+    let!(:existing_product) do
+      create(:product, name: 'ProdutoADeletar', unit_price: 7.00, quantity: 2)
+    end
+
+    before do
+      cart.add_product(existing_product.product_id, existing_product.quantity, existing_product)
+      session[:cart_id] = cart.id
+    end
+
+    context 'quando o produto NÃO existe' do
+      it 'retorna erro de produto não encontrado' do
+        allow(Product).to receive(:find_by).with(product_id: 999).and_return(nil)
+
+        delete :delete_item, params: { id: 999 }
+
+        expect(response).to have_http_status(422)
+        expect(json_response[:error]).to eq('Produto não encontrado no carrinho')
+      end
+    end
+
+    context 'quando o produto existe mas NÃO tem carrinho' do
+      let!(:orphaned_product) do
+        create(:product, name: 'Produto Z', unit_price: 5.00, quantity: 1, cart: nil)
+      end
+
+      it 'retorna erro de produto sem carrinho' do
+        delete :delete_item, params: { id: orphaned_product.product_id }
+
+        expect(response).to have_http_status(422)
+        expect(json_response[:error]).to eq('Produto não encontrado no carrinho')
+      end
+    end
+
+    context 'quando o produto existe mas está em outro carrinho' do
+      let!(:other_cart) { create(:cart) }
+      let!(:other_product) do
+        create(:product, name: 'ProdutoEmOutroCart', unit_price: 9.90, quantity: 1)
+      end
+
+      before do
+        other_cart.add_product(other_product.product_id, other_product.quantity, other_product)
+      end
+
+      it 'não remove produto de outro carrinho' do
+        expect do
+          delete :delete_item, params: { id: other_product.product_id }
+          cart.reload
+        end.not_to change(cart.products, :count)
+
+        expect(response).to have_http_status(422)
+        expect(json_response[:error]).to eq('Produto não encontrado no carrinho')
+      end
+    end
+  end
+
   private
 
   def json_response

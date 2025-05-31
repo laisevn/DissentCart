@@ -37,6 +37,19 @@ class CartsController < ApplicationController
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
+  def delete_item
+    cart = current_or_create_cart
+    product_id = params[:id]
+
+    updated_cart_data = Cart::RemoveProduct.new.call(cart.id, product_id)
+
+    render json: updated_cart_data, status: :ok
+  rescue CartErrors::CartNotFound
+    render json: { error: 'Carrinho não encontrado' }, status: :unprocessable_entity
+  rescue CartErrors::ProductNotFound
+    render json: { error: 'Produto não encontrado no carrinho' }, status: :unprocessable_entity
+  end
+
   private
 
   def current_or_create_cart
