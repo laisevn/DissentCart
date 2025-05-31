@@ -1,0 +1,14 @@
+:schedule:
+  abandon_carts_job:
+    cron: "0 */3 * * *"
+    class: AbandonCartsJob
+    queue: default
+    description: "Marca carrinhos abandonados"
+    
+  delete_abandoned_carts_job:
+    cron: "0 0 * * *"
+    class: DeleteAbandonedCartsJob
+    queue: default
+    description: "Remove carrinhos abandonados há mais de 7 dias"
+
+:concurrency: 5
