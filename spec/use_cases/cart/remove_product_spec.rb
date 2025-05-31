@@ -20,7 +20,7 @@ describe Cart::RemoveProduct do
       it 'lança o erro CartErrors::ProductNotFound' do
         allow(cart_class).to receive(:includes).with(:products).and_call_original
 
-        expect { subject.call(cart.id, 123) }.to raise_error(CartErrors::ProductNotFound)
+        expect { subject.call(cart.id, 123) }.to raise_error(CartErrors::ProductNotInCart)
       end
     end
 

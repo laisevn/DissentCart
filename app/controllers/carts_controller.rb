@@ -31,7 +31,7 @@ class CartsController < ApplicationController
     cart.reload
 
     render json: CartSerializer.new(updated_cart).as_json, status: :ok
-  rescue ActiveRecord::RecordNotFound, CartErrors::ProductNotFound
+  rescue ActiveRecord::RecordNotFound, CartErrors::ProductNotInCart
     render json: { error: 'Produto não encontrado no carrinho' }, status: :unprocessable_entity
   rescue CartErrors::InvalidQuantity => e
     render json: { error: e.message }, status: :unprocessable_entity
@@ -46,7 +46,7 @@ class CartsController < ApplicationController
     render json: updated_cart_data, status: :ok
   rescue CartErrors::CartNotFound
     render json: { error: 'Carrinho não encontrado' }, status: :unprocessable_entity
-  rescue CartErrors::ProductNotFound
+  rescue CartErrors::ProductNotInCart
     render json: { error: 'Produto não encontrado no carrinho' }, status: :unprocessable_entity
   end
 

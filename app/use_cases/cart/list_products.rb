@@ -17,6 +17,7 @@ class Cart::ListProducts
 
   private
 
+  # find cart with products
   def find_cart(cart_id)
     cart_class.includes(:products).find_by(id: cart_id) || raise(CartErrors::CartNotFound)
   end
