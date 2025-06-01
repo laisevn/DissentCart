@@ -22,7 +22,7 @@ group :development, :test do
   gem 'brakeman', require: false
   gem 'debug', platforms: %i[mri windows], require: 'debug/prelude'
   gem 'factory_bot_rails'
-  gem 'faker', '~> 2.0'
+  gem 'faker', '~> 3.5'
   gem 'fasterer'
   gem 'pre-commit', require: false
   gem 'rails_best_practices'
