@@ -3,19 +3,14 @@ default: &default
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
-  host: localhost
-  username: <%= Rails.application.credentials.dig(:development, :database_username) %>
+  host: <%=  ENV.fetch('DATABASE_HOST') { 'localhost' } %>
+  username: <%= ENV.fetch('DATABASE_USERNAME') { Rails.application.credentials.dig(:development, :database_username) } %>
+  password: <%= ENV.fetch('DATABASE_PASSWORD') { Rails.application.credentials.dig(:development, :database_password) } %>
 
 development:
   <<: *default
   database: dissent_cart_development
-  password: <%= Rails.application.credentials.dig(:development, :database_password) %>
 
 test:
   <<: *default
   database: dissent_cart_test
-
-production:
-  <<: *default
-  database: dissent_cart_production
-  password: <%= Rails.application.credentials.dig(:production, :database_password) %>

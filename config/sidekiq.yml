@@ -1,3 +1,7 @@
+:queues:
+  - default
+  - mailers
+
 :schedule:
   abandon_carts_job:
     cron: "0 */3 * * *"
@@ -12,3 +16,4 @@
     description: "Remove carrinhos abandonados há mais de 7 dias"
 
 :concurrency: 5
+:redis_url: <%= ENV.fetch('REDIS_URL', 'redis://redis:6379/0') %>
