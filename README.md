@@ -1,50 +1,45 @@
-# Documentação da API de Carrinhos de Compras
 
-<div id="top"></div>
 
 <br />
 <div align="center">
   <h1 align="center">DissentCart</h1>
 
   <h3 align="center">
-    API de Gerenciamento de Carrinhos de Compras, construído com Ruby on Rails 8.0.2 seguindo os princípios de Clean Code  e Service Objects.
+    API de Gerenciamento de Carrinhos de Compras
     <br />
   </h3>
 
-[![Ruby][Ruby]][Ruby]
-[![Rails][Rails]][Rails]
-[![PostgreSQL][PostgreSQL]][PostgreSQL]
-[![Sidekiq][Sidekiq]][Sidekiq]
-[![Redis][Redis]][Redis]
-
+  [![Ruby][Ruby]][Ruby]
+  [![Rails][Rails]][Rails]
+  [![PostgreSQL][PostgreSQL]][PostgreSQL]
+  [![Sidekiq][Sidekiq]][Sidekiq]
+  [![Redis][Redis]][Redis]
 </div>
 
 ## Sumário
 
-- [Documentação da API de Carrinhos de Compras](#documentação-da-api-de-carrinhos-de-compras)
-  - [Sumário](#sumário)
-  - [Sobre o Projeto](#sobre-o-projeto)
-  - [Arquitetura e Design](#arquitetura-e-design)
-  - [Configuração do Ambiente](#configuração-do-ambiente)
-    - [Pré-requisitos](#pré-requisitos)
-  - [Jobs Agendados](#jobs-agendados)
-  - [Documentação da API](#documentação-da-api)
-    - [Listagem de carrinho `GET /carts/:id`](#listagem-de-carrinho-get-cartsid)
-    - [Adição de carrinho `POST /carts`](#adição-de-carrinho-post-carts)
-    - [Atualização de item `POST /carts/add_item`](#atualização-de-item-post-cartsadd_item)
-    - [Remove produto do carrinho DELETE `/carts/:product_id`](#remove-produto-do-carrinho-delete-cartsproduct_id)
-  - [Dockerização e Ambiente de Testes](#dockerização-e-ambiente-de-testes)
-    - [Script de Execução](#script-de-execução)
+- [Sumário](#sumário)
+- [Sobre o Projeto](#sobre-o-projeto)
+- [Arquitetura e Design](#arquitetura-e-design)
+- [Configuração do Ambiente](#configuração-do-ambiente)
+  - [Pré-requisitos](#pré-requisitos)
+- [Jobs Agendados](#jobs-agendados)
+- [Documentação da API](#documentação-da-api)
+  - [Listagem de carrinho `GET /carts/:id`](#listagem-de-carrinho-get-cartsid)
+  - [Adição de carrinho `POST /carts`](#adição-de-carrinho-post-carts)
+  - [Atualização de item `POST /carts/add_item`](#atualização-de-item-post-cartsadd_item)
+  - [Remove produto do carrinho DELETE `/carts/:product_id`](#remove-produto-do-carrinho-delete-cartsproduct_id)
+- [Dockerização e Ambiente de Testes](#dockerização-e-ambiente-de-testes)
+  - [Script de Execução](#script-de-execução)
 
+
+
+<!-- ABOUT -->
 ## Sobre o Projeto
 
-API para gerenciamento de carrinhos de compras com:
+É uma API construída com o Rails API que usa processamento assíncrono com Sidekiq e armazenamento em Redis para cache e filas.
 
-- Operações CRUD para produtos em carrinhos
-- Cálculo automático de totais
-- Sistema de abandono de carrinhos
-- Processamento assíncrono com Sidekiq
-- Armazenamento em Redis para cache e filas
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Arquitetura e Design
 
@@ -68,6 +63,9 @@ A estrutura segue princípios de Clean Architecture com uma abordagem amigável 
 4. **Services**
    - Cálculo do carrinho é guardado em cache com o redis para não bloquear ou sobrecarregar o banco de dados
 
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ## Configuração do Ambiente
 
 ### Pré-requisitos
@@ -76,6 +74,8 @@ A estrutura segue princípios de Clean Architecture com uma abordagem amigável 
 - Docker
 - Redis
 - Sidekiq
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Jobs Agendados
 
@@ -93,6 +93,8 @@ Configuração em `config/sidekiq.yml`:
     queue: default
 :concurrency: 5
 ```
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Documentação da API
 
@@ -115,6 +117,8 @@ Configuração em `config/sidekiq.yml`:
   "total_price": 3.50
 }
 ```
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Adição de carrinho `POST /carts`
 
@@ -149,6 +153,8 @@ Configuração em `config/sidekiq.yml`:
 }
 ```
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ### Atualização de item `POST /carts/add_item`
 
 **Parâmetros:**
@@ -182,6 +188,8 @@ Configuração em `config/sidekiq.yml`:
 }
 ```
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ### Remove produto do carrinho DELETE `/carts/:product_id`
 
 **Parâmetros:**
@@ -208,6 +216,8 @@ Configuração em `config/sidekiq.yml`:
 }
 ```
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ## Dockerização e Ambiente de Testes
 
 ### Script de Execução
@@ -218,3 +228,13 @@ O arquivo `run-docker.sh` automatiza a inicialização. Para rodar basta colar n
 chmod +x ./run-docker.sh
 ./run-docker.sh
 ```
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- How to make badge shields https://shields.io/ -->
+[Ruby]: https://img.shields.io/badge/Ruby-c01c28.svg?style=for-the-badge&logo=Ruby&logoColor=ffffff&labelColor=c01c28
+[Rails]: https://img.shields.io/badge/Rails-f66151.svg?style=for-the-badge&logo=RubyonRails&logoColor=ffffff&labelColor=f66151
+[PostgreSQL]: https://img.shields.io/badge/PostgreSQL-3584e4.svg?style=for-the-badge&logo=PostgreSQL&logoColor=ffffff&labelColor=3584e4
+[Sidekiq]: https://img.shields.io/badge/Sidekiq-red?style=for-the-badge&logo=sidekiq
+[Redis]: https://img.shields.io/badge/Redis-ed333b.svg?style=for-the-badge&logo=Redis&logoColor=ffffff&labelColor=ed333b
