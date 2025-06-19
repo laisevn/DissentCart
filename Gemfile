@@ -27,7 +27,7 @@ group :development, :test do
   gem 'pre-commit', require: false
   gem 'rails_best_practices'
   gem 'reek'
-  gem 'rspec-rails', '~> 6.0.0'
+  gem 'rspec-rails', '~> 8.0.1'
   gem 'rubocop', require: false
   gem 'rubocop-factory_bot', '~> 2.27', '>= 2.27.1'
   gem 'rubocop-rails-omakase', require: false
